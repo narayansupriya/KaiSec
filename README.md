@@ -6,11 +6,12 @@ Scan API: Upload vulnerability data for processing.
 Query API: Retrieve vulnerabilities from the database based on the severity.
 
 # Running the Application
-# 1. Building the Docker Image
+## 1. Building the Docker Image
 To build the Docker image for the vulnerability scanner, run the following command:
 
 `docker build -t vulnerability-scanner .`
-# 2. Running the Docker Container
+
+## 2. Running the Docker Container
 You can run the container with the following command. The container will be available on port 8080:
 
 `docker run -d -p 8080:8080 vulnerability-scanner`
@@ -18,11 +19,11 @@ If your container needs privileged access (for specific use cases), you can run 
 
 `docker run --privileged -d -p 8080:8080 vulnerability-scanner`
 
-# 3. Accessing the Application
+## 3. Accessing the Application
 Once the container is running, the API will be accessible at `http://localhost:8080`
 
 # API Endpoints
-# 1. Scan API
+### 1. Scan API
 This endpoint allows you to upload vulnerability scan data for processing.
 
 cURL Request Example
@@ -35,7 +36,7 @@ curl --location 'http://localhost:8080/scan' \
 }'`
 This request will trigger the scan process, uploading vulnerability scan data from the specified repository and filenames.
 
-# 2. Query API
+### 2. Query API
 This endpoint allows you to query vulnerabilities based on their severity.
 
 cURL Request Example
@@ -48,7 +49,7 @@ curl --location 'http://localhost:8080/query' \
 This query filters vulnerabilities based on the severity level, in this case, only retrieving CRITICAL vulnerabilities.
 The allowed severity is "HIGH", "CRITICAL", "MEDIUM" and "LOW" - can be passed in lowercase as well.
 
-**Notes**
+# **Notes**
 *Make sure to have Docker installed on your system to build and run the container.
 You can test the APIs using tools like Postman or directly with curl.
 The API is accessible on port 8080 by default. If you want to change the port, update the Docker run command accordingly.*
