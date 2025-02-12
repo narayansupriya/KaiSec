@@ -1,9 +1,9 @@
-KaiSec Take-home Assessment
+# KaiSec Take-home Assessment
 This project allows you to scan and query vulnerabilities based on their severity. 
-It provides two main functionalities:
 
-Scan API: Upload vulnerability data for processing.
-Query API: Retrieve vulnerabilities from the database based on the severity.
+It provides two main functionalities:
+ - Scan API: Upload vulnerability data for processing.
+ - Query API: Retrieve vulnerabilities from the database based on the severity.
 
 # Running the Application
 ## 1. Building the Docker Image
@@ -15,6 +15,7 @@ To build the Docker image for the vulnerability scanner, run the following comma
 You can run the container with the following command. The container will be available on port 8080:
 
 `docker run -d -p 8080:8080 vulnerability-scanner`
+
 If your container needs privileged access (for specific use cases), you can run it with elevated privileges using:
 
 `docker run --privileged -d -p 8080:8080 vulnerability-scanner`
