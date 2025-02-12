@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-const maxWorkers = 10 // Limit to 10 concurrent workers
+const maxWorkers = 5 // Limit to 5 concurrent workers
 var fetchWithRetryFunc = fetchWithRetry
 
 var funcStoreVulnerability = storeVulnerability
