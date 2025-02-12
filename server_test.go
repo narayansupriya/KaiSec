@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	_ "github.com/stretchr/testify/mock"
 	"io"
 	"net/http"
 	"net/http/httptest"
