@@ -9,8 +9,7 @@ Scan and query for vulnerabilities based on their severity.
  On port 8080
  docker run -d -p 8080:8080 vulnerability-scanner
 
- # Run from the postman
- To scan the files from the repo.
+ # Run from the postman for scan API
  ```curl --location 'http://localhost:8080/scan' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -18,7 +17,7 @@ Scan and query for vulnerabilities based on their severity.
   "filename": ["vulnscan18.json", "vulscan123.json", "vulnscan1011.json", "vulnscan15.json", "vulnscan18.json"]
 }'```
 
-To query from db based on severity
+# Run from the postman for query API
 ```curl --location 'http://localhost:8080/query' \
 --header 'Content-Type: application/json' \
 --data '{"filters": 
