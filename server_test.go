@@ -157,29 +157,27 @@ func TestScanHandler(t *testing.T) {
 			if current > atomic.LoadInt32(&maxConcurrent) {
 				atomic.StoreInt32(&maxConcurrent, current)
 			}
+			//introducing delay
 			time.Sleep(100 * time.Millisecond)
 
 			mockResponse := `[
 			{
 				"scanResults": {
 				"scan_id": "scan_123456789",
-					"vulnerabilities": [
-			{
-			"id": "CVE-2024-1234",
-			"severity": "HIGH",
-			"cvss": 8.5,
-			"status": "fixed",
-			"package_name": "openssl",
-			"current_version": "1.1.1t-r0",
-			"fixed_version": "1.1.1u-r0",
-			"description": "Buffer overflow vulnerability in OpenSSL",
-			"published_date": "2024-01-15T00:00:00Z",
-			"link": "https://nvd.nist.gov/vuln/detail/CVE-2024-1234"
-			}
-			]
-			}
-			}
-			]`
+					"vulnerabilities": [{
+						"id": "CVE-2024-1234",
+						"severity": "HIGH",
+						"cvss": 8.5,
+						"status": "fixed",
+						"package_name": "openssl",
+						"current_version": "1.1.1t-r0",
+						"fixed_version": "1.1.1u-r0",
+						"description": "Buffer overflow vulnerability in OpenSSL",
+						"published_date": "2024-01-15T00:00:00Z",
+						"link": "https://nvd.nist.gov/vuln/detail/CVE-2024-1234"
+					}]
+				}
+			}]`
 			// Decrement counter when done
 			defer atomic.AddInt32(&concurrentProcesses, -1)
 
@@ -277,23 +275,20 @@ func TestScanHandlerToCheckMaxConcurrentProcess(t *testing.T) {
 			{
 				"scanResults": {
 				"scan_id": "scan_123456789",
-					"vulnerabilities": [
-			{
-			"id": "CVE-2024-1234",
-			"severity": "HIGH",
-			"cvss": 8.5,
-			"status": "fixed",
-			"package_name": "openssl",
-			"current_version": "1.1.1t-r0",
-			"fixed_version": "1.1.1u-r0",
-			"description": "Buffer overflow vulnerability in OpenSSL",
-			"published_date": "2024-01-15T00:00:00Z",
-			"link": "https://nvd.nist.gov/vuln/detail/CVE-2024-1234"
-			}
-			]
-			}
-			}
-			]`
+					"vulnerabilities": [{
+						"id": "CVE-2024-1234",
+						"severity": "HIGH",
+						"cvss": 8.5,
+						"status": "fixed",
+						"package_name": "openssl",
+						"current_version": "1.1.1t-r0",
+						"fixed_version": "1.1.1u-r0",
+						"description": "Buffer overflow vulnerability in OpenSSL",
+						"published_date": "2024-01-15T00:00:00Z",
+						"link": "https://nvd.nist.gov/vuln/detail/CVE-2024-1234"
+					}]
+				}
+			}]`
 			// Decrement counter when done
 			defer atomic.AddInt32(&concurrentProcesses, -1)
 
