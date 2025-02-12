@@ -136,7 +136,6 @@ func TestScanHandlerRequestBodies(t *testing.T) {
 	}
 }
 
-// Mocking the fetchWithRetry function
 func TestScanHandler(t *testing.T) {
 	// Ensure scanData is initialized
 	scanData = []ScanResult{}
@@ -157,7 +156,6 @@ func TestScanHandler(t *testing.T) {
 			if current > atomic.LoadInt32(&maxConcurrent) {
 				atomic.StoreInt32(&maxConcurrent, current)
 			}
-			//introducing delay
 			time.Sleep(100 * time.Millisecond)
 
 			mockResponse := `[
@@ -246,6 +244,100 @@ func TestScanHandler(t *testing.T) {
 	current := atomic.LoadInt32(&maxConcurrent)
 	if current != 4 {
 		t.Errorf("Test failed: concurrent processes should be equal to number of files when less than the limit of %d, got %d", maxWorkers, current)
+	}
+}
+
+// when file path doesn't exist
+func TestScanHandlerError(t *testing.T) {
+	// Ensure scanData is initialized
+	scanData = []ScanResult{}
+
+	// Setup mock fetchWithRetry function
+	originalFetchWithRetry := fetchWithRetryFunc
+	defer func() { fetchWithRetryFunc = originalFetchWithRetry }() // Restore after test
+
+	// Variables for tracking concurrency
+	var concurrentProcesses int32
+	var maxConcurrent int32
+
+	// Mocking the fetchWithRetry function for the test
+	fetchWithRetryFunc = func(url string, attempts int) (*http.Response, error) {
+		if strings.HasPrefix(url, "https://raw.githubusercontent.com/test-repo/main/") {
+			// Increment the counter for active concurrent processes
+			current := atomic.AddInt32(&concurrentProcesses, 1)
+			if current > atomic.LoadInt32(&maxConcurrent) {
+				atomic.StoreInt32(&maxConcurrent, current)
+			}
+			time.Sleep(100 * time.Millisecond)
+
+			mockResponse := `[
+			{
+				"scanResults": {
+				"scan_id": "scan_123456789",
+					"vulnerabilities": [{
+						"id": "CVE-2024-1234",
+						"severity": "HIGH",
+						"cvss": 8.5,
+						"status": "fixed",
+						"package_name": "openssl",
+						"current_version": "1.1.1t-r0",
+						"fixed_version": "1.1.1u-r0",
+						"description": "Buffer overflow vulnerability in OpenSSL",
+						"published_date": "2024-01-15T00:00:00Z",
+						"link": "https://nvd.nist.gov/vuln/detail/CVE-2024-1234"
+					}]
+				}
+			}]`
+			// Decrement counter when done
+			defer atomic.AddInt32(&concurrentProcesses, -1)
+
+			// Return the mock response
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(mockResponse)),
+			}, nil
+		}
+		return nil, fmt.Errorf("unexpected URL: %s", url)
+	}
+
+	// Prepare request body
+	reqBody := `{
+        "repo": "test1-repo",
+        "filename": ["test-file.json", "test-file1.json", "test-file8.json", "test-file10.json"]
+    }`
+
+	req := httptest.NewRequest(http.MethodPost, "/scan", bytes.NewBufferString(reqBody))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	// Create a mock instance
+	mockStore := new(MockVulnerabilityStore)
+	mockStore.On("storeVulnerability", mock.Anything).Return(nil) // Expecting the function call
+
+	originalStoreVulnerability := funcStoreVulnerability
+	defer func() { funcStoreVulnerability = originalStoreVulnerability }() // Restore after test
+
+	funcStoreVulnerability = func(v Vulnerability) {
+		mockStore.storeVulnerability(v) // Call mock function
+	}
+
+	// Call the scan handler
+	scanHandler(w, req)
+
+	// Get the response
+	res := w.Result()
+	defer res.Body.Close()
+
+	// Read and log the response body
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Fatalf("Failed to read response body: %v", err)
+	}
+	t.Logf("Response body: %s", body)
+
+	// Check the response status code
+	if res.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status 500 OK, got %d", res.StatusCode)
 	}
 }
 
@@ -383,7 +475,6 @@ func TestStoreVulnerabilityMock(t *testing.T) {
 	// Replace the original storeVulnerability function with the mock for this test
 	mockStore := new(MockVulnerabilityStore)
 
-	// storeVulnerability should be called with 'vuln' and return nothing
 	mockStore.On("storeVulnerability", vuln).Return(nil)
 
 	mockStore.storeVulnerability(vuln)
