@@ -361,7 +361,7 @@ func TestScanHandlerToCheckMaxConcurrentProcess(t *testing.T) {
 	}
 
 	current := atomic.LoadInt32(&maxConcurrent)
-	if current <= 10 {
+	if current <= 5 {
 		t.Logf("Max concurrent processes observed: %d", atomic.LoadInt32(&maxConcurrent))
 	}
 	if current > maxWorkers {
