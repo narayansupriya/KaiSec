@@ -224,12 +224,18 @@ func fetchWithRetry(url string, attempts int) (*http.Response, error) {
 	var err error
 	for i := 0; i < attempts; i++ {
 		resp, err := http.Get(url)
-		if err == nil && resp.StatusCode == http.StatusOK {
-			return resp, nil
+		if err == nil {
+			if resp.StatusCode == http.StatusOK {
+				return resp, nil
+			}
+			// Handle non-OK status codes (e.g., 404, 500)
+			resp.Body.Close()
+			return nil, fmt.Errorf("failed to fetch file from %s, status code: %d", url, resp.StatusCode)
 		}
+		// Retry if there is a network error
 		time.Sleep(2 * time.Second)
 	}
-	return nil, err
+	return nil, fmt.Errorf("failed to fetch file from %s after %d attempts: %w", url, attempts, err)
 }
 
 func storeVulnerability(v Vulnerability) {
