@@ -6,15 +6,24 @@ It provides two main functionalities:
  - Query API: Retrieve vulnerabilities from the database based on the severity.
 
 # Running the Application
-## 1. Building the Docker Image
+## 1a. Download the kai.tar file 
+`docker load -i kai.tar`
+
+## 1b. Running the Docker Container
+You can run the container with the following command. The container will be available on port 8080:
+`docker run -p 8080:8080 kai:latest`
+
+## Use Step 1a and 1b or step 2a and 2b. (Preferred is step 1) continue from step 3.
+
+## 2a. Building the Docker Image
 To build the Docker image for the vulnerability scanner, run the following command:
 
-`docker build -t vulnerability-scanner .`
+`docker build -t kai:latest .`
 
-## 2. Running the Docker Container
+## 2b. Running the Docker Container
 You can run the container with the following command. The container will be available on port 8080:
 
-`docker run -d -p 8080:8080 vulnerability-scanner`
+`docker run -d -p 8080:8080 kai:latest`
 
 If your container needs privileged access (for specific use cases), you can run it with elevated privileges using:
 
