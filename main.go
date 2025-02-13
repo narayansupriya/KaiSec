@@ -172,8 +172,21 @@ func scanHandler(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 	close(errChan)
 
-	if len(errChan) > 0 {
-		http.Error(w, "Some files failed to process", http.StatusInternalServerError)
+	failedFiles := []string{}
+	for err := range errChan {
+		failedFiles = append(failedFiles, err.Error()) // Collect failed files
+	}
+
+	// Check based on the length of failedFiles
+	if len(failedFiles) == len(uniqueFiles) {
+		// All files failed
+		http.Error(w, `{"error": "All files failed to process"}`, http.StatusInternalServerError)
+		return
+	}
+
+	if len(failedFiles) > 0 {
+		// Some files failed
+		http.Error(w, fmt.Sprintf(`{"error": "Some files failed to process", "failed_files": %v}`, failedFiles), http.StatusInternalServerError)
 		return
 	}
 
