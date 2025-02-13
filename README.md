@@ -50,6 +50,35 @@ curl --location 'http://localhost:8080/query' \
 This query filters vulnerabilities based on the severity level, in this case, only retrieving CRITICAL vulnerabilities.
 The allowed severity is "HIGH", "CRITICAL", "MEDIUM" and "LOW" - can be passed in lowercase as well.
 
+#### example curl for testing negative scenario:
+`
+curl --location 'http://localhost:8080/scan' \
+--header 'Content-Type: application/json' \
+--data '{
+  "repo": "velancio/vulnerability_scans",
+  "filename": ["vulnscan18.json", "vulsan123.json", "vlnscan1011.json", "vulnscan15.json", "vulnscan18.json"]
+}'`
+
+`
+curl --location 'http://localhost:8080/scan' \
+--header 'Content-Type: application/json' \
+--data '{
+  "repo": "velancio/vulnerability_scan",
+  "filename": ["vulnscan18.json", "vulsan123.json", "vlnscan1011.json", "vulnscan15.json", "vulnscan18.json"]
+}'`
+
+`curl --location 'http://localhost:8080/query' \
+--header 'Content-Type: application/json' \
+--data '{"filters": 
+{"severity": "everything"}
+}'`
+
+`curl --location 'http://localhost:8080/query' \
+--header 'Content-Type: application/json' \
+--data '{"filters": 
+["severity": "CRITICAL"]
+}'`
+
 # **Notes**
 *Make sure to have Docker installed on your system to build and run the container.
 You can test the APIs using tools like Postman or directly with curl.
