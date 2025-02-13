@@ -118,7 +118,7 @@ From windows command prompt
    `curl -X POST "http://localhost:8080/query" -H "Content-Type: application/json" -d "{ \"filters\": { \"severity\": \"everything\" } }"
    `
    #### d (severity is not in correct format)
-   `curl -X POST "http://localhost:8080/query" -H "Content-Type: application/json" -d "{ \"filters\": { \"severity\": \"CRITICAL\" } }"
+   `curl -X POST "http://localhost:8080/query" -H "Content-Type: application/json" -d "{ \"filters\": [ \"severity\": \"CRITICAL\" ] }"
    `
 
 # **Notes**
