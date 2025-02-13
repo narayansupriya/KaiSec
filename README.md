@@ -1,4 +1,4 @@
-# KaiSec Take-home Assessment
+# Kai Take-home Assessment
 This project allows you to scan and query vulnerabilities based on their severity. 
 
 It provides two main functionalities:
