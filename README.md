@@ -72,8 +72,12 @@ From windows command prompt
 
 `curl -X POST "http://localhost:8080/query" -H "Content-Type: application/json" -d "{\"filters\": {\"severity\": \"CRITICAL\"}}"
 `
+# **Notes**
+Make sure to have Docker installed on your system to use image/build and run the container.
+You can test the APIs using tools like Postman. Please ensure the Method is POST and the body is JSON type if not auto-imported by pasting curl. Please make sure to use the right command, based on where you are running from.
+The API is accessible on port 8080 by default. If you want to change the port, update the Docker run command accordingly.
 
-### example curl for testing negative scenario:
+### additional example curl for testing negative scenario:
 ### *From Postman*
    #### a (Few files are not present)
    `curl --location 'http://localhost:8080/scan' \
@@ -120,12 +124,6 @@ From windows command prompt
    #### d (severity is not in correct format)
    `curl -X POST "http://localhost:8080/query" -H "Content-Type: application/json" -d "{ \"filters\": [ \"severity\": \"CRITICAL\" ] }"
    `
-
-# **Notes**
-Make sure to have Docker installed on your system to use image/build and run the container.
-You can test the APIs using tools like Postman. Please ensure the Method is POST and the body is JSON type if not auto-imported by pasting curl.
-Please make sure to use the right command , based on where you are running from.
-The API is accessible on port 8080 by default. If you want to change the port, update the Docker run command accordingly.
 
 
 
