@@ -1,7 +1,8 @@
 # Kai Take-home Assessment
 This project allows you to scan and query vulnerabilities based on their severity. 
 
-### NOTE: repo name should be in github (do not include https://github.com/ in repo : `link till blob or main` and filename is out of the main branch)
+##### NOTE: The repo should be in github.
+do not include https://github.com/ in repo : `link till blob or main` and filename is out of the main branch
 Example for ```https://github.com/velancio/vulnerability_scans/blob/main/vulnscan16.json``` repo: velancio/vulnerability_scans and filename is vulnscan16.json
 
 It provides two main functionalities:
